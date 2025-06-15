@@ -10,6 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <title>Convert Money</title>
+    <style>
+         /* Remover setas do input do tipo number */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,7 +44,7 @@
         </label>
         <label>
             Valor
-            <input class="currency-value" placeholder="R$ 1.000,00">
+            <input type="text" class="currency-value" placeholder="R$ 1.000,00" />
         </label>
         <button class="convert-button">Converter</button>
         <section>

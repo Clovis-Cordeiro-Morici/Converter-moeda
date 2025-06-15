@@ -1,8 +1,18 @@
 const button1 = document.querySelector(".convert-button")
 const currencyselect = document.querySelector(".currencyselect1")
-function convertvalue() {
+const inputCurrencyValue = document.querySelector(".currency-value");
 
-    const inputcurrencyvalue = document.querySelector(".currency-value").value
+        // Adicionando um evento de entrada para permitir apenas números e vírgulas
+        inputCurrencyValue.addEventListener("input", function() {
+            // Removendo caracteres não numéricos, permitindo apenas números e vírgulas
+            this.value = this.value.replace(/[^0-9.,]/g, ""); 
+        });
+
+
+function convertvalue() {
+    const inputcurrencyvalue = parseFloat(inputCurrencyValue.value.replace(',', '.')); // Convertendo para número
+
+    //const inputcurrencyvalue = document.querySelector(".currency-value").value//
     const valuetoconvert = document.querySelector(".valuereal1")
     const valueconverted = document.querySelector(".valuedolar1")
     const dolartoday = 5.2
@@ -43,7 +53,7 @@ function changecurrency() {
         }).format(valuecurrency)
         imagecurrency.src = "./assets/estados-unidos (1) 1.png"
 
-        
+
     }
 
     if (currencyselect.value == "euro") {
@@ -52,10 +62,10 @@ function changecurrency() {
             style: "currency",
             currency: "EUR"
         }).format(valuecurrency)
-         imagecurrency.src = "./assets/Euro.png"
-        
-    }
+        imagecurrency.src = "./assets/Euro.png"
 
+    }
+convertvalue()
 
 }
 currencyselect.addEventListener("change", changecurrency)
