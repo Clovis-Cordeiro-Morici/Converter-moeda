@@ -90,12 +90,19 @@ section{
     gap:4px;
 
 }
-.real-dolar{
-    font-size: 14px;
-    color:#777777;
-
+.valuedolar1{
+   font-size: 20px;
+    font-weight: 700;
+    color: #555555;
+font-weight: 700;
 }
-.valor{
+.valuereal1{
+    font-size: 20px;
+    font-weight: 700;
+    color: #555555;
+font-weight: 700;
+}
+.Real-dolar{
     font-size: 20px;
     font-weight: 700;
     color: #555555;
