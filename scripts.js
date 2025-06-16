@@ -1,18 +1,18 @@
 const button1 = document.querySelector(".convert-button")
 const currencyselect = document.querySelector(".currencyselect1")
-const inputCurrencyValue = document.querySelector(".currency-value");
+//const inputCurrencyValue = document.querySelector(".currency-value");//
 
         // Adicionando um evento de entrada para permitir apenas números e vírgulas
-        inputCurrencyValue.addEventListener("input", function() {
+       // inputCurrencyValue.addEventListener("input", function() {//
             // Removendo caracteres não numéricos, permitindo apenas números e vírgulas
-            this.value = this.value.replace(/[^0-9.,]/g, ""); 
-        });
+            //this.value = this.value.replace(/[^0-9.,]/g, ""); //
+       // });
 
 
 function convertvalue() {
-    const inputcurrencyvalue = parseFloat(inputCurrencyValue.value.replace(',', '.')); // Convertendo para número
+    //const inputcurrencyvalue = parseFloat(inputCurrencyValue.value.replace(',', '.')); // Convertendo para número//
 
-    //const inputcurrencyvalue = document.querySelector(".currency-value").value//
+    const inputcurrencyvalue = document.querySelector(".currency-value").value
     const valuetoconvert = document.querySelector(".valuereal1")
     const valueconverted = document.querySelector(".valuedolar1")
     const dolartoday = 5.2
