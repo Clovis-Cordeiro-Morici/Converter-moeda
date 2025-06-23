@@ -1,72 +1,95 @@
-const button1 = document.querySelector(".convert-button")
-const currencyselect = document.querySelector(".currencyselect1")
-//const inputCurrencyValue = document.querySelector(".currency-value");//
+const button1 = document.querySelector(".convert-button");
+const currencyselect = document.querySelector(".currencyselect1");
+const inputCurrencyValue = document.querySelector(".currency-value");
 
-        // Adicionando um evento de entrada para permitir apenas números e vírgulas
-       // inputCurrencyValue.addEventListener("input", function() {//
-            // Removendo caracteres não numéricos, permitindo apenas números e vírgulas
-            //this.value = this.value.replace(/[^0-9.,]/g, ""); //
-       // });
+let rates = {
+    USD: 0, // Dólar americano
+    EUR: 0, // Euro
+    GBP: 0  // Libra esterlina
+};
 
+// Adicione sua chave de API aqui
+const apiKey = 'ed2f24a81f79664fdc8b1bad';
 
-function convertvalue() {
-    //const inputcurrencyvalue = parseFloat(inputCurrencyValue.value.replace(',', '.')); // Convertendo para número//
+// Função para obter a URL com base na moeda selecionada
+function getApiUrl(currency) {
+    return `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${currency}`;
+}
 
-    const inputcurrencyvalue = document.querySelector(".currency-value").value
-    const valuetoconvert = document.querySelector(".valuereal1")
-    const valueconverted = document.querySelector(".valuedolar1")
-    const dolartoday = 5.2
-    const eurotoday = 6.2
+async function getRates() {
+    const selectedCurrency = currencyselect.value === "dolar" ? "USD" :
+                             currencyselect.value === "euro" ? "EUR" : "GBP"; // Seleciona a moeda correta
 
-    console.log(currencyselect.value)
+    const apiUrl = getApiUrl(selectedCurrency); // Obter a URL correta com base na moeda selecionada
+
+    try {
+        const response = await fetch(apiUrl); // Faz uma requisição para a API
+        const data = await response.json(); // Transforma a resposta em JSON
+        
+        // Armazena as taxas de câmbio em relação ao real
+        rates.USD = data.conversion_rates.BRL; // Taxa de conversão para USD
+        rates.EUR = data.conversion_rates.BRL; // Taxa de conversão para EUR
+        rates.GBP = data.conversion_rates.BRL; // Taxa de conversão para GBP
+    } catch (error) {
+        console.error("Erro ao buscar as taxas de câmbio:", error);
+        // Valores padrão em caso de erro
+        rates.USD = 5.46;
+        rates.EUR = 6.35;
+        rates.GBP = 7.46;
+    }
+}
+
+async function convertValue() {
+    await getRates(); // Aguardar as taxas de câmbio serem obtidas
+
+    const inputCurrencyValueNumber = parseFloat(inputCurrencyValue.value);
+    const valuetoconvert = document.querySelector(".valuereal1");
+    const valueconverted = document.querySelector(".valuedolar1");
 
     valuetoconvert.innerHTML = new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL"
-    }).format(inputcurrencyvalue)
+    }).format(inputCurrencyValueNumber);
 
-    if (currencyselect.value == "dolar") {
+    if (currencyselect.value === "dolar") {
         valueconverted.innerHTML = new Intl.NumberFormat("en-US", {
             style: "currency",
             currency: "USD"
-        }).format(inputcurrencyvalue / dolartoday)
-    }
-
-    if (currencyselect.value == "euro") {
+        }).format(inputCurrencyValueNumber / rates.USD);
+        console.log(rates.USD);
+    } else if (currencyselect.value === "euro") {
         valueconverted.innerHTML = new Intl.NumberFormat("de-DE", {
             style: "currency",
             currency: "EUR"
-        }).format(inputcurrencyvalue / eurotoday)
+        }).format(inputCurrencyValueNumber / rates.EUR);
+        console.log(rates.EUR);
+    } else if (currencyselect.value === "libra") {
+        valueconverted.innerHTML = new Intl.NumberFormat("de-DE", {
+            style: "currency",
+            currency: "GBP"
+        }).format(inputCurrencyValueNumber / rates.GBP);
+        console.log(rates.GBP);
     }
 }
 
-function changecurrency() {
+function changeCurrency() {
+    const currencyName = document.getElementById("currency-name");
+    const imagecurrency = document.getElementById("image-currency");
 
-    const currencyName = document.getElementById("currency-name")
-    const valuecurrency = document.getElementById("value-currency")
-    const imagecurrency = document.getElementById("image-currency")
-    if (currencyselect.value == "dolar") {
-        currencyName.innerHTML = "Dolar Americano"
-        valuecurrency.innerHTML = new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD"
-        }).format(valuecurrency)
-        imagecurrency.src = "./assets/estados-unidos (1) 1.png"
-
-
+    if (currencyselect.value === "dolar") {
+        currencyName.innerHTML = "Dólar Americano";
+        imagecurrency.src = "./assets/estados-unidos (1) 1.png";
+    } else if (currencyselect.value === "euro") {
+        currencyName.innerHTML = "Euro";
+        imagecurrency.src = "./assets/Euro.png";
+    } else if (currencyselect.value === "libra") {
+        currencyName.innerHTML = "Libra Esterlina";
+        imagecurrency.src = "./assets/libra 1.png";
     }
 
-    if (currencyselect.value == "euro") {
-        currencyName.innerHTML = "Euro"
-        valuecurrency.innerHTML = new Intl.NumberFormat("de-DE", {
-            style: "currency",
-            currency: "EUR"
-        }).format(valuecurrency)
-        imagecurrency.src = "./assets/Euro.png"
-
-    }
-convertvalue()
-
+    convertValue(); // Chama a função de conversão ao mudar a moeda
 }
-currencyselect.addEventListener("change", changecurrency)
-button1.addEventListener("click", convertvalue)
+
+// Adicionando os eventos
+currencyselect.addEventListener("change", changeCurrency);
+button1.addEventListener("click", convertValue);
